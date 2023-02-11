@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\Engine">
+      <UniqueIdentifier>{b39eca3a-4153-400d-a951-4e97785317ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Window">
+      <UniqueIdentifier>{a4e3dff6-bd4d-4ac8-8536-f3148571745c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Tasks">
+      <UniqueIdentifier>{9f65ec4d-d45f-47a6-9bb0-f85fede73943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Singleton">
+      <UniqueIdentifier>{a4ae5788-e64f-44dc-be38-ba3bd45dd848}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="NihEngine.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Fichiers sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Engine.h">
+      <Filter>Fichiers sources\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\Window.h">
+      <Filter>Fichiers sources\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Tasks\TaskManager.h">
+      <Filter>Fichiers sources\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="Tasks\Task.h">
+      <Filter>Fichiers sources\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton\Singleton.h">
+      <Filter>Fichiers sources\Singleton</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="NihEngine.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Engine.cpp">
+      <Filter>Fichiers sources\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\Window.cpp">
+      <Filter>Fichiers sources\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Tasks\TaskManager.cpp">
+      <Filter>Fichiers sources\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="Tasks\Task.cpp">
+      <Filter>Fichiers sources\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="Singleton\Singleton.cpp">
+      <Filter>Fichiers sources\Singleton</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NihEngine.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="NihEngine.ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
