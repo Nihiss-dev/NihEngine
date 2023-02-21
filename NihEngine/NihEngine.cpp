@@ -18,7 +18,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    std::shared_ptr<TaskManager> taskManager = TaskManager::GetInstance();
+    std::unique_ptr<Engine> engine = std::make_unique<Engine>();
 
     Window::WindowInit windowInit;
     windowInit.m_hInstance = hInstance;
@@ -27,11 +27,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     windowInit.m_Heigth = 1920;
     windowInit.m_Width = 1080;
 
-    Window window = Window(std::move(windowInit));
-    taskManager->AddTask(&window);
+    engine->SetWindowInit(std::move(windowInit));
 
-    taskManager->Init();
-    taskManager->Run();
+    engine->Init();
+    engine->Run();
 
     return 0;
 }
