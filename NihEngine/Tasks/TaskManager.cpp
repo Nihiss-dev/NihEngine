@@ -21,22 +21,12 @@ void TaskManager::Init()
 	}
 }
 
-void TaskManager::Run()
+void TaskManager::Update(float deltaTime)
 {
-	m_IsRunning = true;
-
-	while (m_IsRunning)
+	for (Task* task : m_Tasks)
 	{
-		for (Task* task : m_Tasks)
-		{
-			task->Run();
-		}
+		task->Update(deltaTime);
 	}
-}
-
-void TaskManager::Stop()
-{
-	m_IsRunning = false;
 }
 
 void TaskManager::AddTask(Task* task)

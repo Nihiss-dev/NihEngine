@@ -5,7 +5,7 @@
 
 #include "Tasks/Task.h"
 
-class Window : public Task
+class Window
 {
 public:
 	struct WindowInit
@@ -28,8 +28,8 @@ public:
 	Window(const Window&) = delete;
 	Window& operator= (const Window&) = delete;
 
-	void Init() override;
-	void Run() override;
+	void Init();
+	void Run();
 
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 

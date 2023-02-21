@@ -7,16 +7,17 @@
 
 class Task;
 
-class TaskManager : public Singleton<TaskManager>
+class TaskManager
 {
 public:
 	TaskManager();
 	~TaskManager();
 
-	void Init();
-	void Run();
-	void Stop();
+	TaskManager(const TaskManager&) = delete;
+	TaskManager& operator=(const TaskManager&) = delete;
 
+	void Init();
+	void Update(float deltaTime);
 	void AddTask(Task* task);
 private:
 

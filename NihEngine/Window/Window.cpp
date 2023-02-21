@@ -70,7 +70,7 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
-		TaskManager::GetInstance()->Stop();
+		//TaskManager::GetInstance()->Stop();
 		break;
 	default:
 		return DefWindowProc(hwnd, message, wParam, lParam);
