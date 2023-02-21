@@ -39,12 +39,6 @@ void TaskManager::Stop()
 	m_IsRunning = false;
 }
 
-void TaskManager::AddTask(Task&& task)
-{
-	// TODO : find a way to add with std::move
-	//m_Tasks.push_back(std::move(task));
-}
-
 void TaskManager::AddTask(Task* task)
 {
 	m_Tasks.push_back(task);

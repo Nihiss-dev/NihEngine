@@ -35,6 +35,7 @@ public:
 
 private:
 	WindowInit m_WindowInit;
+	HWND m_Hwnd;
 
 	int m_Height = 480;
 	int m_Width = 480;

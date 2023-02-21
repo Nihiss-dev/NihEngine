@@ -3,6 +3,7 @@
 #include <vector>
 #include <thread>
 #include "Singleton/Singleton.h"
+#include <deque>
 
 class Task;
 
@@ -16,13 +17,11 @@ public:
 	void Run();
 	void Stop();
 
-	void AddTask(Task&& task);
 	void AddTask(Task* task);
 private:
 
 	// every task should be in a separate thread
 	std::vector<Task*> m_Tasks;
-	std::vector<std::thread> m_Threads;
 
 	bool m_IsRunning;
 };

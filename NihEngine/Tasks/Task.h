@@ -11,7 +11,7 @@ public:
 	Task& operator=(const Task&) = delete;
 	Task(const Task&) = delete;
 
-	virtual void Init();
-	virtual void Run();
+	virtual void Init() = 0;
+	virtual void Run() = 0;
 };
 

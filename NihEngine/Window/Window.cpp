@@ -36,14 +36,14 @@ void Window::Init()
 	if (!RegisterClassExW(&wcex))
 		return;
 
-	HWND hwnd = CreateWindowExW(0, L"Test", L"TOTO", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_Height, m_Width, nullptr, nullptr, wcex.hInstance, nullptr);
-	if (!hwnd)
+	m_Hwnd = CreateWindowExW(0, L"Test", L"TOTO", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_Height, m_Width, nullptr, nullptr, wcex.hInstance, nullptr);
+	if (!m_Hwnd)
 		return;
 
-	ShowWindow(hwnd, m_WindowInit.m_NCmdShow);
+	ShowWindow(m_Hwnd, m_WindowInit.m_NCmdShow);
 
 	RECT rc = { 0, 0, static_cast<LONG>(m_Height), static_cast<LONG>(m_Width) };
-	GetClientRect(hwnd, &rc);
+	GetClientRect(m_Hwnd, &rc);
 }
 
 void Window::Run()
