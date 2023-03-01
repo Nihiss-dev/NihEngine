@@ -17,7 +17,11 @@ public:
 	TaskManager& operator=(const TaskManager&) = delete;
 
 	void Init();
+	void BeginSimulation();
+	void BeginFrame();
 	void Update(float deltaTime);
+	void EndFrame();
+	void EndSimulation();
 	void AddTask(Task* task);
 private:
 

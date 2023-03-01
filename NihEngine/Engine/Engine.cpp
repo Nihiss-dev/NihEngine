@@ -38,10 +38,12 @@ void Engine::Run()
 void Engine::BeginSimulation()
 {
 	m_IsRunning = true;
+	m_TaskManager->BeginSimulation();
 }
 
 void Engine::BeginFrame()
 {
+	m_TaskManager->BeginFrame();
 }
 
 void Engine::Update(float deltaTime)
@@ -51,8 +53,10 @@ void Engine::Update(float deltaTime)
 
 void Engine::EndFrame()
 {
+	m_TaskManager->EndFrame();
 }
 
 void Engine::EndSimulation()
 {
+	m_TaskManager->EndSimulation();
 }
