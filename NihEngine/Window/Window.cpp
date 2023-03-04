@@ -28,7 +28,7 @@ void Window::Init()
 	wcex.lpfnWndProc = (WNDPROC)Update;
 	wcex.hInstance = m_WindowInit.m_hInstance;
 	wcex.hIcon = LoadIconW(wcex.hInstance, L"IDI_ICON");
-	wcex.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+	wcex.hCursor = LoadCursorW(nullptr, (LPCWSTR)IDC_ARROW);
 	wcex.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
 	wcex.lpszClassName = L"Test";
 	wcex.hIconSm = LoadIconW(wcex.hInstance, L"IDI_ICON");
