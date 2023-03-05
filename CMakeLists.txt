@@ -16,4 +16,5 @@ set_target_properties(NihEngine PROPERTIES WIN32_EXECUTABLE TRUE)
 
 target_link_libraries(NihEngine PRIVATE User32 Gdi32)
 
+enable_testing()
 add_subdirectory(Tests)
