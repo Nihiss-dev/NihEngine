@@ -19,4 +19,4 @@ jobs:
       - name: Tests
         run: |
           cd build
-          ctest -c Release -W
+          ctest -C Release -W
