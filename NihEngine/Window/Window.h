@@ -29,7 +29,7 @@ public:
 	Window& operator= (const Window&) = delete;
 
 	void Init();
-	void Run();
+	void UpdateMessages();
 
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 

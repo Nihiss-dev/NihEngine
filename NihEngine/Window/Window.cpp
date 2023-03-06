@@ -46,7 +46,7 @@ void Window::Init()
 	GetClientRect(m_Hwnd, &rc);
 }
 
-void Window::Run()
+void Window::UpdateMessages()
 {
 	MSG msg = {};
 

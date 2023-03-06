@@ -27,10 +27,11 @@ void Engine::Run()
 	BeginSimulation();
 	while (m_IsRunning)
 	{
+		// Make sure we consume all messages coming from the window first
+		m_Window->UpdateMessages();
 		BeginFrame();
 		Update(0.0f);
 		EndFrame();
-		m_Window->Run();
 	}
 	EndSimulation();
 }
