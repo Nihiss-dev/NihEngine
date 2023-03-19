@@ -23,6 +23,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     Window::WindowInit windowInit;
     windowInit.m_hInstance = hInstance;
     windowInit.m_Style = CS_HREDRAW | CS_VREDRAW;
+    windowInit.m_WindowName = "NihEngine";
     windowInit.m_NCmdShow = nCmdShow;
     windowInit.m_Heigth = 1920;
     windowInit.m_Width = 1080;

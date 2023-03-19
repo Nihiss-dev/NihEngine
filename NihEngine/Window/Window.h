@@ -1,6 +1,7 @@
 #pragma once
 
 #include "framework.h"
+#include <string>
 #include "NihEngine.h"
 
 #include "Tasks/Task.h"
@@ -12,6 +13,8 @@ public:
 	{
 		HINSTANCE m_hInstance;
 		UINT m_Style;
+
+		std::string m_WindowName;
 		int m_NCmdShow;
 
 		int m_Heigth;
@@ -36,6 +39,7 @@ public:
 private:
 	WindowInit m_WindowInit;
 	HWND m_Hwnd;
+	std::string m_WindowName;
 
 	int m_Height = 480;
 	int m_Width = 480;

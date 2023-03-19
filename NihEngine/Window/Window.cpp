@@ -11,6 +11,7 @@ Window::Window(WindowInit&& windowInit)
 	: m_WindowInit(windowInit)
 	, m_Height(windowInit.m_Heigth)
 	, m_Width(windowInit.m_Width)
+	, m_WindowName(windowInit.m_WindowName)
 {
 
 }
@@ -36,7 +37,9 @@ void Window::Init()
 	if (!RegisterClassExW(&wcex))
 		return;
 
-	m_Hwnd = CreateWindowExW(0, L"Test", L"TOTO", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_Height, m_Width, nullptr, nullptr, wcex.hInstance, nullptr);
+	std::wstring windowName = std::wstring(m_WindowName.begin(), m_WindowName.end());
+	LPCWSTR windowNameStr = windowName.c_str();
+	m_Hwnd = CreateWindowExW(0, L"Test", windowNameStr, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_Height, m_Width, HWND(), HMENU(), wcex.hInstance, nullptr);
 	if (!m_Hwnd)
 		return;
 
@@ -73,7 +76,7 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		//TaskManager::GetInstance()->Stop();
 		break;
 	default:
-		return DefWindowProc(hwnd, message, wParam, lParam);
+		return DefWindowProcW(hwnd, message, wParam, lParam);
 	}
 	return 0;
 }
