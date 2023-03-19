@@ -27,11 +27,9 @@ void Engine::Run()
 	BeginSimulation();
 	while (m_IsRunning)
 	{
-		// Make sure we consume all messages coming from the window first
-		m_Window->UpdateMessages();
-		BeginFrame();
-		Update(0.0f);
-		EndFrame();
+		m_Timer.Tick([&]() {
+			Tick();
+		});
 	}
 	EndSimulation();
 }
@@ -40,6 +38,19 @@ void Engine::BeginSimulation()
 {
 	m_IsRunning = true;
 	m_TaskManager->BeginSimulation();
+}
+
+void Engine::Tick()
+{
+	float deltaTime = float(m_Timer.GetElapsedSeconds());
+	// Make sure we consume all messages coming from the window first
+	m_Window->UpdateMessages();
+	BeginFrame();
+	Update(deltaTime);
+	EndFrame();
+
+	// now that all logic has been updated, update rendering
+	m_Window->Render();
 }
 
 void Engine::BeginFrame()

@@ -80,3 +80,8 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	}
 	return 0;
 }
+
+void Window::Render()
+{
+
+}

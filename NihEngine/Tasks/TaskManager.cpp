@@ -35,7 +35,8 @@ void TaskManager::BeginFrame()
 
 void TaskManager::Update(float deltaTime)
 {
-	OutputDebugStringA("Update\n");
+	std::string test = std::string("Update: ") + std::to_string(deltaTime) + std::string("\n");;
+	OutputDebugStringA(test.c_str());
 	for (Task* task : m_Tasks)
 	{
 		task->Update(deltaTime);

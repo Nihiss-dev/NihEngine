@@ -33,6 +33,7 @@ public:
 
 	void Init();
 	void UpdateMessages();
+	void Render();
 
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
