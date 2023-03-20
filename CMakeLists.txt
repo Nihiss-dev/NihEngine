@@ -22,7 +22,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE /Wall /GR /fp:fast "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")
-target_link_options(${PROJECT_NAME} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>" /DYNAMICBASE /NXCOMPAT)
+target_link_options(${PROJECT_NAME} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>" /DYNAMICBASE /NXCOMPAT /DEBUG)
 
 if((${CMAKE_SIZEOF_VOID_P} EQUAL 4) AND (NOT ${DIRECTX_ARCH} MATCHES "^arm"))
     target_link_options(${PROJECT_NAME} PRIVATE /SAFESEH)
@@ -34,10 +34,12 @@ if((MSVC_VERSION GREATER_EQUAL 1928) AND (CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_link_options(${PROJECT_NAME} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:ehcont>")
 endif()
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<IF:$<CONFIG:DEBUG>,_DEBUG,NDEBUG>)
+
 target_compile_options(${PROJECT_NAME} PRIVATE
-        /sdl /permissive- /Zc:__cplusplus /Zc:inline
+        /sdl /permissive- /Zc:__cplusplus /Zc:inline /Zc:preprocessor /Zi /EHsc
         "/wd4061" "/wd4365" "/wd4514" "/wd4571" "/wd4668" "/wd4710" "/wd4820" "/wd5039" "/wd5045"
-        "/wd4265" "/wd4625" "/wd4626" "/wd4986" "/wd5204" "/wd5220")
+        "/wd4265" "/wd4625" "/wd4626" "/wd4986" "/wd5204" "/wd5220" "/wd5264")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME})
 

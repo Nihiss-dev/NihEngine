@@ -50,6 +50,11 @@ void Engine::Tick()
 	EndFrame();
 
 	// now that all logic has been updated, update rendering
+	// don't try to render anything before the first update
+	if (m_Timer.GetFrameCount() == 0)
+	{
+		return;
+	}
 	m_Window->Render();
 }
 

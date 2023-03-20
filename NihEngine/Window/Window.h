@@ -2,9 +2,11 @@
 
 #include "framework.h"
 #include <string>
+#include <memory>
 #include "NihEngine.h"
 
 #include "Tasks/Task.h"
+#include "Window/Renderer.h"
 
 class Window
 {
@@ -38,6 +40,7 @@ public:
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
+	std::unique_ptr<Renderer> m_Renderer;
 	WindowInit m_WindowInit;
 	HWND m_Hwnd;
 	std::string m_WindowName;

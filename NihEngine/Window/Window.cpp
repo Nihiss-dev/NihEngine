@@ -47,6 +47,9 @@ void Window::Init()
 
 	RECT rc = { 0, 0, static_cast<LONG>(m_Height), static_cast<LONG>(m_Width) };
 	GetClientRect(m_Hwnd, &rc);
+
+	m_Renderer = std::make_unique<Renderer>();
+	m_Renderer->Initialize(m_Hwnd, m_Height, m_Width);
 }
 
 void Window::UpdateMessages()
@@ -83,5 +86,5 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 
 void Window::Render()
 {
-
+	m_Renderer->Render();
 }
