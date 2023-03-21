@@ -7,8 +7,6 @@ project(NihEngine)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#add_compile_options(/EHsc)
-
 file(GLOB_RECURSE SOURCES "NihEngine/*.cpp")
 
 add_executable(NihEngine ${SOURCES})
@@ -22,7 +20,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE /Wall /GR /fp:fast "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")
-target_link_options(${PROJECT_NAME} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>" /DYNAMICBASE /NXCOMPAT /DEBUG)
+target_link_options(${PROJECT_NAME} PRIVATE "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>" /DYNAMICBASE /NXCOMPAT)
 
 if((${CMAKE_SIZEOF_VOID_P} EQUAL 4) AND (NOT ${DIRECTX_ARCH} MATCHES "^arm"))
     target_link_options(${PROJECT_NAME} PRIVATE /SAFESEH)
@@ -37,7 +35,7 @@ endif()
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<IF:$<CONFIG:DEBUG>,_DEBUG,NDEBUG>)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
-        /sdl /permissive- /Zc:__cplusplus /Zc:inline /Zc:preprocessor /Zi /EHsc
+        /sdl /permissive- /Zc:__cplusplus /Zc:inline /Zc:preprocessor /EHsc
         "/wd4061" "/wd4365" "/wd4514" "/wd4571" "/wd4668" "/wd4710" "/wd4820" "/wd5039" "/wd5045"
         "/wd4265" "/wd4625" "/wd4626" "/wd4986" "/wd5204" "/wd5220" "/wd5264")
 
