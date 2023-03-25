@@ -228,8 +228,38 @@ void Renderer::CreateResources()
 void Renderer::Render()
 {
 	Clear();
-	// add rendering here
 	Present();
+}
+
+void Renderer::OnActivated()
+{
+
+}
+
+void Renderer::OnDeactivated()
+{
+
+}
+
+void Renderer::OnSuspending()
+{
+
+}
+
+void Renderer::OnResuming()
+{
+
+}
+
+void Renderer::OnWindowSizeChanged(int width, int height)
+{
+
+}
+
+void Renderer::GetDefaultSize(int& width, int& heigth)
+{
+	width = m_OutputWidth;
+	heigth = m_OutputHeigth;
 }
 
 void Renderer::Clear()

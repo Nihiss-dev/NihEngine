@@ -19,6 +19,13 @@ public:
 	void Initialize(HWND window, int width, int heigth);
 	void Render();
 
+	// messages
+	void OnActivated();
+	void OnDeactivated();
+	void OnSuspending();
+	void OnResuming();
+	void OnWindowSizeChanged(int width, int heigth);
+	void GetDefaultSize(int &width, int &height);
 private:
 	void CreateDevice();
 	void CreateResources();
@@ -30,6 +37,7 @@ private:
 
 	void OnDeviceLost();
 	void MoveToNextFrame();
+
 private:
 	HWND m_Window;
 	int m_OutputWidth;
