@@ -31,6 +31,7 @@ foreach(FILE ${SOURCES})
     source_group("${GROUP}" FILES "${FILE}")
 endforeach()
 
+add_subdirectory(ExternalDependencies)
 add_executable(NihEngine ${SOURCES})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -39,6 +40,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     comdlg32.lib advapi32.lib shell32.lib
     ole32.lib oleaut32.lib
     runtimeobject.lib
+	DirectXTK12
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE /Wall /GR /fp:fast "$<$<NOT:$<CONFIG:DEBUG>>:/guard:cf>")

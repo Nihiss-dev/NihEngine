@@ -1,5 +1,6 @@
 #include <array>
 
+#include "NihPCH.h"
 #include "Window/Renderer.h"
 #include "Window/d3dx12.h"
 
