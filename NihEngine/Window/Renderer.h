@@ -1,5 +1,7 @@
 #pragma once
 
+#include "NihPCH.h"
+
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include <wrl.h>
@@ -60,4 +62,6 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain3> m_SwapChain;
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_RenderTargets[m_SwapBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_DepthStencil;
+
+	std::unique_ptr<DirectX::GraphicsMemory> m_GraphicsMemory;
  };

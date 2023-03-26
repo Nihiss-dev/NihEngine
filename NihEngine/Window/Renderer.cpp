@@ -1,6 +1,5 @@
 #include <array>
 
-#include "NihPCH.h"
 #include "Window/Renderer.h"
 #include "Window/d3dx12.h"
 
@@ -128,6 +127,8 @@ void Renderer::CreateDevice()
 #endif // _DEBUG
 		// we should assert
 	}
+
+	m_GraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(m_D3dDevice.Get());
 }
 
 void Renderer::CreateResources()
@@ -316,6 +317,8 @@ void Renderer::Present()
 	{
 		MoveToNextFrame();
 	}
+
+	m_GraphicsMemory->Commit(m_CommandQueue.Get());
 }
 
 void Renderer::GetAdapter(IDXGIAdapter** ppAdapter)
@@ -394,6 +397,8 @@ void Renderer::OnDeviceLost()
 	m_CommandQueue.Reset();
 	m_D3dDevice.Reset();
 	m_DxgiFactory.Reset();
+
+	m_GraphicsMemory.reset();
 
 	CreateDevice();
 	CreateResources();
