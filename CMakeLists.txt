@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-file(GLOB_RECURSE SOURCES "NihEngine/*.cpp" "NihEngine/*.h")
+file(GLOB_RECURSE SOURCES "NihEngine/*.cpp" "NihEngine/*.h" "ExternalDependencies/*.cpp" "ExternalDependencies/*.h")
 
 foreach(FILE ${SOURCES}) 
     # Get the directory of the source file
