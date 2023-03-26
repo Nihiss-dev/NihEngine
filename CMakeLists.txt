@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-file(GLOB_RECURSE SOURCES "NihEngine/*.cpp" "NihEngine/*.h" "ExternalDependencies/*.cpp" "ExternalDependencies/*.h")
+file(GLOB_RECURSE SOURCES "NihEngine/*.cpp" "NihEngine/*.h")
+file(GLOB ${SOURCES} "ExternalDependencies/*.cpp" "ExternalDependencies/*.h")
 
 foreach(FILE ${SOURCES}) 
     # Get the directory of the source file
@@ -64,6 +65,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         "/wd4265" "/wd4625" "/wd4626" "/wd4986" "/wd5204" "/wd5220" "/wd5264")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ExternalDependencies/Imgui)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
 
