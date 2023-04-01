@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include "Core/Memory/UniquePtr.h"
 #include "Tasks/TaskManager.h"
 #include "Window/Window.h"
 #include "Engine/StepTimer.h"
@@ -33,8 +33,8 @@ private:
     void EndSimulation();
 
 private:
-    std::unique_ptr<TaskManager> m_TaskManager;
-    std::unique_ptr<Window> m_Window;
+    UniquePtr<TaskManager> m_TaskManager;
+    UniquePtr<Window> m_Window;
 
     DX::StepTimer m_Timer;
     bool m_IsRunning{false};

@@ -10,6 +10,8 @@
 #include <dxgidebug.h>
 #endif
 
+#include "Core/Memory/UniquePtr.h"
+
 class Renderer
 {
 public:
@@ -63,5 +65,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_RenderTargets[m_SwapBufferCount];
 	Microsoft::WRL::ComPtr<ID3D12Resource> m_DepthStencil;
 
-	std::unique_ptr<DirectX::GraphicsMemory> m_GraphicsMemory;
+	UniquePtr<DirectX::GraphicsMemory> m_GraphicsMemory;
  };
