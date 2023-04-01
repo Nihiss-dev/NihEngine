@@ -1,9 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <thread>
+#include "Core/Types/Vector.h"
 #include "Singleton/Singleton.h"
-#include <deque>
 
 class Task;
 
@@ -26,7 +25,8 @@ public:
 private:
 
 	// every task should be in a separate thread
-	std::vector<Task*> m_Tasks;
+	//std::vector<Task*> m_Tasks;
+	Vector<Task*> m_Tasks;
 
 	bool m_IsRunning;
 };
