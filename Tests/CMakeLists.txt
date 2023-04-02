@@ -10,6 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 cmake_minimum_required(VERSION 3.10)
 
+project(test_me)
 SET(TEST_EXE NihEngineTest)
 
 enable_testing()
