@@ -10,16 +10,15 @@ FetchContent_MakeAvailable(googletest)
 
 cmake_minimum_required(VERSION 3.10)
 
-project(test_me)
+SET(TEST_EXE NihEngineTest)
 
 enable_testing()
 
-#find_package(GTest REQUIRED)
-
 file(GLOB_RECURSE TEST_SOURCES "*.cpp")
-add_executable(runUnitTests ${TEST_SOURCES})
+add_executable(${TEST_EXE} ${TEST_SOURCES})
 
 include(GoogleTest)
-target_link_libraries(runUnitTests GTest::gtest_main)
+target_include_directories(${TEST_EXE} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../NihEngine)
+target_link_libraries(${TEST_EXE} GTest::gtest_main)
 
-gtest_discover_tests(runUnitTests)
+gtest_discover_tests(${TEST_EXE})
