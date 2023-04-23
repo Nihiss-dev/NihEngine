@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.24)
 
 set(DIRECTXTK12_VERSION 1.5.1)
 
-project(NihEngine)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_SYSTEM_VERSION 10.0.20348.0)
+
+project(NihEngine)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
