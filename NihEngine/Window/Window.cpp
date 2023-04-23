@@ -9,9 +9,9 @@ Window::Window()
 
 Window::Window(WindowInit&& windowInit)
 	: m_WindowInit(windowInit)
+	, m_WindowName(windowInit.m_WindowName)
 	, m_Height(windowInit.m_Heigth)
 	, m_Width(windowInit.m_Width)
-	, m_WindowName(windowInit.m_WindowName)
 {
 
 }

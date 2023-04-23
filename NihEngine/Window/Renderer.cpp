@@ -255,7 +255,13 @@ void Renderer::OnResuming()
 
 void Renderer::OnWindowSizeChanged(int width, int height)
 {
+	if (m_Window)
+		return;
 
+	m_OutputWidth = width;
+	m_OutputHeigth = height;
+
+	CreateResources();
 }
 
 void Renderer::GetDefaultSize(int& width, int& heigth)
