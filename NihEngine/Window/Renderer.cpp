@@ -1,5 +1,3 @@
-#include <array>
-
 #include "Window/Renderer.h"
 #include "Window/d3dx12.h"
 
@@ -21,11 +19,11 @@ Renderer::~Renderer()
 	WaitForGPU();
 }
 
-void Renderer::Initialize(HWND window, int width, int heigth)
+void Renderer::Initialize(HWND window, int width, int height)
 {
 	m_Window = window;
 	m_OutputWidth = width;
-	m_OutputHeigth = heigth;
+	m_OutputHeight = height;
 	CreateDevice();
 	CreateResources();
 }
@@ -144,11 +142,11 @@ void Renderer::CreateResources()
 	constexpr DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
 	constexpr DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT;
 	const UINT backBufferWidth = static_cast<UINT>(m_OutputWidth);
-	const UINT backBufferHeigth = static_cast<UINT>(m_OutputHeigth);
+	const UINT backBufferHeight = static_cast<UINT>(m_OutputHeight);
 
 	if (m_SwapChain)
 	{
-		HRESULT hr = m_SwapChain->ResizeBuffers(m_SwapBufferCount, backBufferWidth, backBufferHeigth, backBufferFormat, 0);
+		const HRESULT hr = m_SwapChain->ResizeBuffers(m_SwapBufferCount, backBufferWidth, backBufferHeight, backBufferFormat, 0);
 
 		if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
 		{
@@ -161,7 +159,7 @@ void Renderer::CreateResources()
 		// Create a descriptor for the swap chain
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
 		swapChainDesc.Width = backBufferWidth;
-		swapChainDesc.Height = backBufferHeigth;
+		swapChainDesc.Height = backBufferHeight;
 		swapChainDesc.Format = backBufferFormat;
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.BufferCount = m_SwapBufferCount;
@@ -207,7 +205,7 @@ void Renderer::CreateResources()
 	// on this surface
 	const CD3DX12_HEAP_PROPERTIES depthHeapProperties(D3D12_HEAP_TYPE_DEFAULT);
 
-	D3D12_RESOURCE_DESC depthStencilDesc = CD3DX12_RESOURCE_DESC::Tex2D(depthBufferFormat, backBufferWidth, backBufferHeigth,
+	D3D12_RESOURCE_DESC depthStencilDesc = CD3DX12_RESOURCE_DESC::Tex2D(depthBufferFormat, backBufferWidth, backBufferHeight,
 		1, /* This depth stencil view has only one texture */
 		1 /* Use a single mipmap level */
 	);
@@ -223,7 +221,7 @@ void Renderer::CreateResources()
 	dsvDesc.Format = depthBufferFormat;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 
-	auto cpuHandle = m_DsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	const auto& cpuHandle = m_DsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	m_D3dDevice->CreateDepthStencilView(m_DepthStencil.Get(), &dsvDesc, cpuHandle);
 }
 
@@ -259,15 +257,15 @@ void Renderer::OnWindowSizeChanged(int width, int height)
 		return;
 
 	m_OutputWidth = width;
-	m_OutputHeigth = height;
+	m_OutputHeight = height;
 
 	CreateResources();
 }
 
-void Renderer::GetDefaultSize(int& width, int& heigth)
+void Renderer::GetDefaultSize(int& width, int& height)
 {
 	width = m_OutputWidth;
-	heigth = m_OutputHeigth;
+	height = m_OutputHeight;
 }
 
 void Renderer::Clear()
@@ -282,18 +280,18 @@ void Renderer::Clear()
 	m_CommandList->ResourceBarrier(1, &barrier);
 
 	// Clear the views
-	auto cpuHandle = m_RtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
-	auto cpuHandleDSV = m_DsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	const auto& cpuHandle = m_RtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	const auto& cpuHandleDSV = m_DsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 
 	const CD3DX12_CPU_DESCRIPTOR_HANDLE rtvDescriptor(cpuHandle, static_cast<INT>(m_BackBufferIndex), m_RtvDescriptorSize);
-	CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescriptor(cpuHandleDSV);
+	const CD3DX12_CPU_DESCRIPTOR_HANDLE dsvDescriptor(cpuHandleDSV);
 	m_CommandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
 	m_CommandList->ClearRenderTargetView(rtvDescriptor, DirectX::Colors::CornflowerBlue, 0, nullptr);
 	m_CommandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	// Set the viewport and scissor rect
-	const D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(m_OutputWidth), static_cast<float>(m_OutputHeigth), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
-	const D3D12_RECT scissorRect = { 0, 0, static_cast<LONG>(m_OutputWidth), static_cast<LONG>(m_OutputHeigth) };
+	const D3D12_VIEWPORT viewport = { 0.0f, 0.0f, static_cast<float>(m_OutputWidth), static_cast<float>(m_OutputHeight), D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
+	const D3D12_RECT scissorRect = { 0, 0, static_cast<LONG>(m_OutputWidth), static_cast<LONG>(m_OutputHeight) };
 	m_CommandList->RSSetViewports(1, &viewport);
 	m_CommandList->RSSetScissorRects(1, & scissorRect);
 }
@@ -312,7 +310,7 @@ void Renderer::Present()
 	// The first argument instruct DXGI to block until VSync, putting the application
 	// to sleep until the next VSync. The ensure we don't waste any cycles rendering
 	// frames that will never be displayed to the screen
-	HRESULT hr = m_SwapChain->Present(1, 0);
+	const HRESULT& hr = m_SwapChain->Present(1, 0);
 
 	// If the device was reset we must completely reinitialize the renderer
 	if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
@@ -371,7 +369,7 @@ void Renderer::WaitForGPU()
 	if (m_CommandQueue && m_Fence && m_FenceEvent.IsValid())
 	{
 		// Schedule a signal command in the GPU queue
-		UINT64 fenceValue = m_FenceValues[m_BackBufferIndex];
+		const UINT64 fenceValue = m_FenceValues[m_BackBufferIndex];
 		if (SUCCEEDED(m_CommandQueue->Signal(m_Fence.Get(), fenceValue)))
 		{
 			// Wait until the signal has been processed

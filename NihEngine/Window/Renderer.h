@@ -20,7 +20,7 @@ public:
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
 
-	void Initialize(HWND window, int width, int heigth);
+	void Initialize(HWND window, int width, int height);
 	void Render();
 
 	// messages
@@ -28,7 +28,7 @@ public:
 	void OnDeactivated();
 	void OnSuspending();
 	void OnResuming();
-	void OnWindowSizeChanged(int width, int heigth);
+	void OnWindowSizeChanged(int width, int height);
 	void GetDefaultSize(int &width, int &height);
 private:
 	void CreateDevice();
@@ -45,7 +45,7 @@ private:
 private:
 	HWND m_Window;
 	int m_OutputWidth;
-	int m_OutputHeigth;
+	int m_OutputHeight;
 	D3D_FEATURE_LEVEL m_FeatureLevel;
 	static const UINT m_SwapBufferCount = 2;
 	UINT m_BackBufferIndex;
