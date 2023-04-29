@@ -20,7 +20,7 @@ public:
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
 
-	void Initialize(HWND window, int width, int height);
+	void Initialize(const HWND window, const int width, const int height);
 	void Render();
 
 	// messages
@@ -28,7 +28,7 @@ public:
 	void OnDeactivated();
 	void OnSuspending();
 	void OnResuming();
-	void OnWindowSizeChanged(int width, int height);
+	void OnWindowSizeChanged(const int width, const int height);
 	void GetDefaultSize(int &width, int &height);
 private:
 	void CreateDevice();
@@ -47,7 +47,7 @@ private:
 	int m_OutputWidth;
 	int m_OutputHeight;
 	D3D_FEATURE_LEVEL m_FeatureLevel;
-	static const UINT m_SwapBufferCount = 2;
+	static constexpr UINT m_SwapBufferCount = 2;
 	UINT m_BackBufferIndex;
 	UINT m_RtvDescriptorSize;
 	Microsoft::WRL::ComPtr<ID3D12Device> m_D3dDevice;

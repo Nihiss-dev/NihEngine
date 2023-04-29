@@ -1,6 +1,7 @@
 #include "Window/Renderer.h"
 #include "Window/d3dx12.h"
 
+#include "System/Assert.h"
 #include <DirectXColors.h>
 
 using Microsoft::WRL::ComPtr;
@@ -19,7 +20,7 @@ Renderer::~Renderer()
 	WaitForGPU();
 }
 
-void Renderer::Initialize(HWND window, int width, int height)
+void Renderer::Initialize(const HWND window, const int width, const int height)
 {
 	m_Window = window;
 	m_OutputWidth = width;
@@ -113,7 +114,7 @@ void Renderer::CreateDevice()
 	m_FenceEvent.Attach(CreateEventEx(nullptr, nullptr, 0, EVENT_MODIFY_STATE | SYNCHRONIZE));
 	if (!m_FenceEvent.IsValid())
 	{
-		// we should assert
+		NIH_ASSERT(false);
 	}
 
 	// Check shader model 6 support
@@ -123,7 +124,7 @@ void Renderer::CreateDevice()
 #ifdef _DEBUG
 		OutputDebugStringA("ERROR: Shader Model 6.0 is not supported\n");
 #endif // _DEBUG
-		// we should assert
+		NIH_ASSERT(false);
 	}
 
 	m_GraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(m_D3dDevice.Get());
@@ -251,7 +252,7 @@ void Renderer::OnResuming()
 
 }
 
-void Renderer::OnWindowSizeChanged(int width, int height)
+void Renderer::OnWindowSizeChanged(const int width, const int height)
 {
 	if (m_Window)
 		return;
