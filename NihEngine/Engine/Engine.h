@@ -4,18 +4,13 @@
 #include "Tasks/TaskManager.h"
 #include "Window/Window.h"
 #include "Engine/StepTimer.h"
+#include "Core/NonCopyable.h"
 
-class Engine
+class Engine : private NonCopyable
 {
 public:
-    Engine();
-    ~Engine();
-
-    Engine(Engine&&) = default;
-    Engine& operator= (Engine&&) = default;
-
-    Engine(const Engine&) = delete;
-    Engine& operator= (const Engine&) = delete;
+    Engine() = default;
+    ~Engine() = default;
 
     void SetWindowInit(Window::WindowInit&& windowInit);
 
@@ -33,8 +28,8 @@ private:
     void EndSimulation();
 
 private:
-    UniquePtr<TaskManager> m_TaskManager;
-    UniquePtr<Window> m_Window;
+    UniquePtr<TaskManager> m_TaskManager{};
+    UniquePtr<Window> m_Window{};
 
     DX::StepTimer m_Timer;
     bool m_IsRunning{false};

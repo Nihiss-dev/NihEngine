@@ -1,15 +1,6 @@
 
 #include "Engine.h"
 
-Engine::Engine()
-{
-
-}
-
-Engine::~Engine()
-{
-}
-
 void Engine::SetWindowInit(Window::WindowInit&& windowInit)
 {
 	m_Window = std::make_unique<Window>(std::move(windowInit));
