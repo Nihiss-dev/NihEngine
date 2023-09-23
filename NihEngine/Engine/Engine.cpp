@@ -54,7 +54,7 @@ void Engine::BeginFrame()
 	m_TaskManager->BeginFrame();
 }
 
-void Engine::Update(float deltaTime)
+void Engine::Update(const float deltaTime)
 {
 	m_TaskManager->Update(deltaTime);
 }

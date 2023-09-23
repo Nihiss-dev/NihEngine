@@ -5,6 +5,8 @@
 Window::Window()
 {
 	m_WindowInit = {};
+	m_Renderer = std::make_unique<Renderer>();
+	m_Renderer->RegisterDeviceNotify(this);
 }
 
 Window::Window(WindowInit&& windowInit)
@@ -13,12 +15,16 @@ Window::Window(WindowInit&& windowInit)
 	, m_Height(windowInit.m_Heigth)
 	, m_Width(windowInit.m_Width)
 {
-
+	m_Renderer = std::make_unique<Renderer>();
+	m_Renderer->RegisterDeviceNotify(this);
 }
 
 Window::~Window()
 {
-
+	if (m_Renderer)
+	{
+		m_Renderer->WaitForGPU();
+	}
 }
 
 void Window::Init()
@@ -50,7 +56,10 @@ void Window::Init()
 	RECT rc = { 0, 0, static_cast<LONG>(m_Height), static_cast<LONG>(m_Width) };
 	GetClientRect(m_Hwnd, &rc);
 
-	m_Renderer->Initialize(m_Hwnd, m_Height, m_Width);
+	//m_Renderer->Initialize(m_Hwnd, m_Height, m_Width);
+	m_Renderer->SetWindow(m_Hwnd, m_Height, m_Width);
+	m_Renderer->CreateDeviceResources();
+	m_Renderer->CreateWindowSizeDependentResources();
 }
 
 void Window::UpdateMessages()
@@ -199,9 +208,9 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 				SetWindowLongPtr(hwnd, GWL_STYLE, WS_OVERLAPPEDWINDOW);
 				SetWindowLongPtr(hwnd, GWL_EXSTYLE, 0);
 
-				int width = 800;
-				int height = 600;
-				renderer->GetDefaultSize(width, height);
+				RECT rec = renderer->GetOutputSize();
+				int width = rec.right;
+				int height = rec.top;
 
 				ShowWindow(hwnd, SW_SHOWNORMAL);
 				SetWindowPos(hwnd, HWND_TOP, 0, 0, width, height, SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
@@ -226,4 +235,14 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 void Window::Render()
 {
 	m_Renderer->Render();
+}
+
+void Window::OnDeviceLost()
+{
+	
+}
+
+void Window::OnDeviceRestored()
+{
+	
 }

@@ -22,7 +22,7 @@ private:
 
     void Tick();
     void BeginFrame();
-    void Update(float deltaTime);
+    void Update(const float deltaTime);
     void EndFrame();
 
     void EndSimulation();

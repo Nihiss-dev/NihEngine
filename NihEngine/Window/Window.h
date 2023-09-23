@@ -5,27 +5,28 @@
 #include "NihEngine.h"
 
 #include "Core/Memory/UniquePtr.h"
-#include "Tasks/Task.h"
 #include "Window/Renderer.h"
+#include "Window/IDeviceNotify.h"
 
-class Window
+class Window : public IDeviceNotify
+//class Window
 {
 public:
 	struct WindowInit
 	{
-		HINSTANCE m_hInstance;
-		UINT m_Style;
+		HINSTANCE m_hInstance{};
+		UINT m_Style{};
 
-		std::string m_WindowName;
-		int m_NCmdShow;
+		std::string m_WindowName{};
+		int m_NCmdShow{};
 
-		int m_Heigth;
-		int m_Width;
+		int m_Heigth{};
+		int m_Width{};
 	};
 
 	Window();
 	Window(WindowInit&&);
-	~Window();
+	virtual ~Window();
 
 	Window(Window&&) = default;
 	Window& operator= (Window&&) = default;
@@ -38,6 +39,9 @@ public:
 	void Render();
 
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+	void OnDeviceLost() override;
+	void OnDeviceRestored() override;
 
 private:
 	UniquePtr<Renderer> m_Renderer;

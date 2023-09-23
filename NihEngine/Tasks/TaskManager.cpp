@@ -1,6 +1,7 @@
 #include "TaskManager.h"
 
 #include "Window/Window.h"
+#include "Tasks/Task.h"
 
 #include <iostream>
 

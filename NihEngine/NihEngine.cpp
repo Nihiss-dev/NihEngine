@@ -7,7 +7,6 @@
 #include "Core/Memory/UniquePtr.h"
 #include "Engine/Engine.h"
 #include "Window/Window.h"
-#include "Tasks/TaskManager.h"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,

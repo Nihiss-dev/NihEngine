@@ -1,8 +1,6 @@
 #pragma once
 
-#include <thread>
 #include "Core/Containers/Vector.h"
-#include "Singleton/Singleton.h"
 
 class Task;
 
