@@ -349,6 +349,10 @@ void Renderer::CreateWindowSizeDependentResources()
 	m_ScissorRect.left = m_ScissorRect.top = 0;
 	m_ScissorRect.right = static_cast<LONG>(backBufferWidth);
 	m_ScissorRect.bottom = static_cast<LONG>(backBufferHeight);
+
+	DirectX::SimpleMath::Matrix proj = DirectX::SimpleMath::Matrix::CreateScale(2.f / float(m_OutputSize.right), -2.f / float(m_OutputSize.bottom), 1.f) *
+		DirectX::SimpleMath::Matrix::CreateTranslation(-1.0f, 1.0f, 0.0f);
+	m_Effect->SetProjection(proj);
 }
 
 void Renderer::Render()
@@ -359,9 +363,9 @@ void Renderer::Render()
 	m_Effect->Apply(m_CommandList.Get());
 	m_Batch->Begin(m_CommandList.Get());
 
-	DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(0.f, 0.5f, 0.5f), DirectX::Colors::Yellow);
-	DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(0.5f, -0.5f, 0.5f), DirectX::Colors::Yellow);
-	DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(-0.5f, -0.5f, 0.5f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(400.f, 150.0f, 0.f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(600.f, 450.f, 0.0f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(200.f, 450.0f, 0.0f), DirectX::Colors::Yellow);
 
 	m_Batch->DrawTriangle(v1, v2, v3);
 	m_Batch->End();
