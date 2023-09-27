@@ -7,6 +7,8 @@
 #include <dxgi1_4.h>
 #include <wrl.h>
 
+#include "Core/Memory/UniquePtr.h"
+
 #ifdef _DEBUG
 #include <dxgidebug.h>
 #endif
@@ -142,4 +144,10 @@ private:
 
 	//The IDeviceNotify can be held directly as it owns the Renderer
 	IDeviceNotify* m_DeviceNotify;
- };
+
+	UniquePtr<DirectX::GraphicsMemory> m_GraphicsMemory;
+
+	using VertexType = DirectX::VertexPositionColor;
+	UniquePtr<DirectX::BasicEffect> m_Effect;
+	UniquePtr<DirectX::PrimitiveBatch<VertexType>> m_Batch;
+};

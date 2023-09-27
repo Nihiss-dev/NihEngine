@@ -220,6 +220,14 @@ void Renderer::CreateDeviceResources()
 #endif // _DEBUG
 		NIH_ASSERT(false);
 	}
+
+	m_GraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(m_D3dDevice.Get());
+
+	m_Batch = std::make_unique<DirectX::PrimitiveBatch<VertexType>>(m_D3dDevice.Get());
+
+	DirectX::RenderTargetState rtState(GetBackBufferFormat(), GetDepthBufferFormat());
+	DirectX::EffectPipelineStateDescription pipeState(&VertexType::InputLayout, DirectX::CommonStates::Opaque, DirectX::CommonStates::DepthDefault, DirectX::CommonStates::CullNone, rtState);
+	m_Effect = std::make_unique<DirectX::BasicEffect>(m_D3dDevice.Get(), DirectX::EffectFlags::VertexColor, pipeState);
 }
 
 void Renderer::CreateWindowSizeDependentResources()
@@ -347,7 +355,20 @@ void Renderer::Render()
 {
 	Prepare();
 	Clear();
+
+	m_Effect->Apply(m_CommandList.Get());
+	m_Batch->Begin(m_CommandList.Get());
+
+	DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(0.f, 0.5f, 0.5f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(0.5f, -0.5f, 0.5f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(-0.5f, -0.5f, 0.5f), DirectX::Colors::Yellow);
+
+	m_Batch->DrawTriangle(v1, v2, v3);
+	m_Batch->End();
+
 	Present();
+
+	m_GraphicsMemory->Commit(GetCommandQueue());
 }
 
 void Renderer::OnActivated()
@@ -529,6 +550,15 @@ void Renderer::WaitForGPU()
 
 void Renderer::HandleDeviceLost()
 {
+	if (m_DeviceNotify)
+	{
+		m_DeviceNotify->OnDeviceLost();
+	}
+
+	m_GraphicsMemory.reset();
+	m_Effect.reset();
+	m_Batch.reset();
+
 	for (UINT n = 0; n < m_BackBufferCount; n++)
 	{
 		m_CommandAllocators[n].Reset();
@@ -660,9 +690,9 @@ void Renderer::UpdateColorSpace()
 	m_ColorSpace = colorSpace;
 
 	UINT colorSpaceSupport = 0;
-if (m_SwapChain && SUCCEEDED(m_SwapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport))
-	&& (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT))
-{
-	m_SwapChain->SetColorSpace1(colorSpace);
-}
+	if (m_SwapChain && SUCCEEDED(m_SwapChain->CheckColorSpaceSupport(colorSpace, &colorSpaceSupport))
+		&& (colorSpaceSupport & DXGI_SWAP_CHAIN_COLOR_SPACE_SUPPORT_FLAG_PRESENT))
+	{
+		m_SwapChain->SetColorSpace1(colorSpace);
+	}
 }
