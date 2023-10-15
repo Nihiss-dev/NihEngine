@@ -150,4 +150,8 @@ private:
 	using VertexType = DirectX::VertexPositionColor;
 	UniquePtr<DirectX::BasicEffect> m_Effect;
 	UniquePtr<DirectX::PrimitiveBatch<VertexType>> m_Batch;
+
+	DirectX::SimpleMath::Matrix m_World;
+	DirectX::SimpleMath::Matrix m_View;
+	DirectX::SimpleMath::Matrix m_Proj;
 };
