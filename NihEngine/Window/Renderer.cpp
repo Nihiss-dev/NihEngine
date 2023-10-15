@@ -363,9 +363,9 @@ void Renderer::Render()
 	m_Effect->Apply(m_CommandList.Get());
 	m_Batch->Begin(m_CommandList.Get());
 
-	DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(400.f, 150.0f, 0.f), DirectX::Colors::Yellow);
-	DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(600.f, 450.f, 0.0f), DirectX::Colors::Yellow);
-	DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(200.f, 450.0f, 0.0f), DirectX::Colors::Yellow);
+	DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(400.f, 150.0f, 0.f), DirectX::Colors::Red);
+	DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(600.f, 450.f, 0.0f), DirectX::Colors::Green);
+	DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(200.f, 450.0f, 0.0f), DirectX::Colors::Blue);
 
 	m_Batch->DrawTriangle(v1, v2, v3);
 	m_Batch->End();
