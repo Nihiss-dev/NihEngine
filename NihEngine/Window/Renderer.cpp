@@ -356,9 +356,6 @@ void Renderer::CreateWindowSizeDependentResources()
 	m_View = Matrix::CreateLookAt(DirectX::SimpleMath::Vector3(2.0f, 2.0f, 2.0f), DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::UnitY);
 
 	m_Proj = Matrix::CreatePerspectiveFieldOfView(DirectX::XM_PI / 4.0f, float(m_OutputSize.right) / float(m_OutputSize.bottom), 0.1f, 10.0f);
-	//Matrix proj = Matrix::CreateScale(2.f / float(m_OutputSize.right), -2.f / float(m_OutputSize.bottom), 1.f) *
-	//	Matrix::CreateTranslation(-1.0f, 1.0f, 0.0f);
-	//m_Effect->SetProjection(proj);
 	m_Effect->SetView(m_View);
 	m_Effect->SetProjection(m_Proj);
 }
@@ -371,12 +368,6 @@ void Renderer::Render()
 	m_Effect->SetWorld(m_World);
 	m_Effect->Apply(m_CommandList.Get());
 	m_Batch->Begin(m_CommandList.Get());
-
-	//DirectX::VertexPositionColor v1(DirectX::SimpleMath::Vector3(400.f, 150.0f, 0.f), DirectX::Colors::Red);
-	//DirectX::VertexPositionColor v2(DirectX::SimpleMath::Vector3(600.f, 450.f, 0.0f), DirectX::Colors::Green);
-	//DirectX::VertexPositionColor v3(DirectX::SimpleMath::Vector3(200.f, 450.0f, 0.0f), DirectX::Colors::Blue);
-
-	//m_Batch->DrawTriangle(v1, v2, v3);
 
 	DirectX::SimpleMath::Vector3 xAxis(2.0f, 0.0f, 0.0f);
 	DirectX::SimpleMath::Vector3 yAxis(0.0f, 0.0f, 2.0f);
