@@ -223,11 +223,13 @@ void Renderer::CreateDeviceResources()
 
 	m_GraphicsMemory = std::make_unique<DirectX::GraphicsMemory>(m_D3dDevice.Get());
 
-	m_Batch = std::make_unique<DirectX::PrimitiveBatch<VertexType>>(m_D3dDevice.Get());
-
 	DirectX::RenderTargetState rtState(GetBackBufferFormat(), GetDepthBufferFormat());
-	DirectX::EffectPipelineStateDescription pipeState(&VertexType::InputLayout, DirectX::CommonStates::Opaque, DirectX::CommonStates::DepthDefault, DirectX::CommonStates::CullNone, rtState, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
-	m_Effect = std::make_unique<DirectX::BasicEffect>(m_D3dDevice.Get(), DirectX::EffectFlags::VertexColor, pipeState);
+	DirectX::EffectPipelineStateDescription pipeState(&DirectX::GeometricPrimitive::VertexType::InputLayout, DirectX::CommonStates::Opaque, DirectX::CommonStates::DepthDefault, DirectX::CommonStates::CullNone, rtState);
+	m_Effect = std::make_unique<DirectX::BasicEffect>(m_D3dDevice.Get(), DirectX::EffectFlags::Lighting, pipeState);
+	m_Effect->EnableDefaultLighting();
+
+	m_Shape = DirectX::GeometricPrimitive::CreateSphere();
+
 	m_World = DirectX::SimpleMath::Matrix::Identity;
 }
 
@@ -354,8 +356,8 @@ void Renderer::CreateWindowSizeDependentResources()
 	using DirectX::SimpleMath::Matrix;
 
 	m_View = Matrix::CreateLookAt(DirectX::SimpleMath::Vector3(2.0f, 2.0f, 2.0f), DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::UnitY);
-
 	m_Proj = Matrix::CreatePerspectiveFieldOfView(DirectX::XM_PI / 4.0f, float(m_OutputSize.right) / float(m_OutputSize.bottom), 0.1f, 10.0f);
+	m_World = Matrix::Identity;
 	m_Effect->SetView(m_View);
 	m_Effect->SetProjection(m_Proj);
 }
@@ -367,39 +369,7 @@ void Renderer::Render()
 
 	m_Effect->SetWorld(m_World);
 	m_Effect->Apply(m_CommandList.Get());
-	m_Batch->Begin(m_CommandList.Get());
-
-	DirectX::SimpleMath::Vector3 xAxis(2.0f, 0.0f, 0.0f);
-	DirectX::SimpleMath::Vector3 yAxis(0.0f, 0.0f, 2.0f);
-	DirectX::SimpleMath::Vector3 origin = DirectX::SimpleMath::Vector3::Zero;
-
-	constexpr size_t divisions = 20;
-
-	for (size_t i = 0; i <= divisions; ++i)
-	{
-		float fPercent = float(i) / float(divisions);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		DirectX::SimpleMath::Vector3 scale = xAxis * fPercent + origin;
-
-		VertexType v1(scale - yAxis, DirectX::Colors::White);
-		VertexType v2(scale + yAxis, DirectX::Colors::White);
-		m_Batch->DrawLine(v1, v2);
-	}
-
-	for (size_t i = 0; i <= divisions; i++)
-	{
-		float fPercent = float(i) / float(divisions);
-		fPercent = (fPercent * 2.0f) - 1.0f;
-
-		DirectX::SimpleMath::Vector3 scale = yAxis * fPercent + origin;
-
-		VertexType v1(scale - xAxis, DirectX::Colors::White);
-		VertexType v2(scale + xAxis, DirectX::Colors::White);
-		m_Batch->DrawLine(v1, v2);
-	}
-
-	m_Batch->End();
+	m_Shape->Draw(m_CommandList.Get());
 
 	Present();
 
@@ -591,8 +561,9 @@ void Renderer::HandleDeviceLost()
 	}
 
 	m_GraphicsMemory.reset();
+	m_Shape.reset();
 	m_Effect.reset();
-	m_Batch.reset();
+	//m_Batch.reset();
 
 	for (UINT n = 0; n < m_BackBufferCount; n++)
 	{
