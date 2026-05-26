@@ -1,25 +1,44 @@
-# Include Google Test via CMake
 include(FetchContent)
+
+# ---------------------------------------------------------------------------
+# GoogleTest
+# ---------------------------------------------------------------------------
 FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        v1.15.2
 )
+# Force shared CRT on Windows so it matches the engine target
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-cmake_minimum_required(VERSION 3.10)
+# ---------------------------------------------------------------------------
+# Test sources
+# Note: re-run generate.bat whenever you add or remove files.
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE TEST_SOURCES
+    "*.cpp"
+)
 
-project(test_me)
-SET(TEST_EXE NihEngineTest)
+# ---------------------------------------------------------------------------
+# Test executable
+# ---------------------------------------------------------------------------
+add_executable(NihEngineTests ${TEST_SOURCES})
 
-enable_testing()
+target_compile_features(NihEngineTests PRIVATE cxx_std_20)
 
-file(GLOB_RECURSE TEST_SOURCES "*.cpp")
-add_executable(${TEST_EXE} ${TEST_SOURCES})
+target_include_directories(NihEngineTests
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../NihEngine
+)
 
+target_link_libraries(NihEngineTests
+    PRIVATE
+        GTest::gtest_main
+)
+
+# ---------------------------------------------------------------------------
+# Test discovery
+# ---------------------------------------------------------------------------
 include(GoogleTest)
-target_include_directories(${TEST_EXE} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../NihEngine)
-target_link_libraries(${TEST_EXE} GTest::gtest_main)
-
-gtest_discover_tests(${TEST_EXE})
+gtest_discover_tests(NihEngineTests)
