@@ -1,10 +1,11 @@
 #pragma once
 
 #include <array>
+#include <vector>
 #include "System/Assert.h"
 
 template <typename T, size_t Size>
-class Array
+class InplaceArray
 {
 public:
 	[[nodiscard]] constexpr const T& At(size_t pos) const
@@ -39,4 +40,7 @@ public:
 
 // Deducing guides that will let us write Array array{0,1,2,3} without specifying type or size
 template<class Type, class... Size>
-Array(Type, Size...) -> Array<Type, 1 + sizeof...(Size)>;
+InplaceArray(Type, Size...) -> InplaceArray<Type, 1 + sizeof...(Size)>;
+
+template<class T>
+using Array = std::vector<T>;

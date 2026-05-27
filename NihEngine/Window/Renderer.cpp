@@ -52,6 +52,8 @@ Renderer::Renderer(DXGI_FORMAT backBufferFormat, DXGI_FORMAT depthBufferFormat, 
 {
 	NIH_ASSERT(!(backBufferCount < 2 || backBufferCount > MAX_BACK_BUFFER_COUNT));
 	NIH_ASSERT(!(minFeatureLevel < D3D_FEATURE_LEVEL_11_0));
+
+	m_Scene = std::make_unique<Scene>();
 }
 
 Renderer::~Renderer()
@@ -216,7 +218,8 @@ void Renderer::CreateDeviceResources()
 	if (FAILED(m_D3dDevice->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel))) || (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_0))
 	{
 #ifdef _DEBUG
-		OutputDebugStringA("ERROR: Shader Model 6.0 is not supported\n");
+		//OutputDebugStringA("ERROR: Shader Model 6.0 is not supported\n");
+		NIH_LOG_ERROR(LogCategory::Renderer, "Shader Model 6.0 is not supported");
 #endif // _DEBUG
 		NIH_ASSERT(false);
 	}
@@ -228,7 +231,8 @@ void Renderer::CreateDeviceResources()
 	m_Effect = std::make_unique<DirectX::BasicEffect>(m_D3dDevice.Get(), DirectX::EffectFlags::Lighting, pipeState);
 	m_Effect->EnableDefaultLighting();
 
-	m_Shape = DirectX::GeometricPrimitive::CreateSphere();
+	m_Scene->Init();
+	//m_Shape = DirectX::GeometricPrimitive::CreateSphere();
 
 	m_World = DirectX::SimpleMath::Matrix::Identity;
 }
@@ -357,9 +361,11 @@ void Renderer::CreateWindowSizeDependentResources()
 
 	m_View = Matrix::CreateLookAt(DirectX::SimpleMath::Vector3(2.0f, 2.0f, 2.0f), DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::UnitY);
 	m_Proj = Matrix::CreatePerspectiveFieldOfView(DirectX::XM_PI / 4.0f, float(m_OutputSize.right) / float(m_OutputSize.bottom), 0.1f, 10.0f);
-	m_World = Matrix::Identity;
 	m_Effect->SetView(m_View);
 	m_Effect->SetProjection(m_Proj);
+
+	m_World = Matrix::Identity;
+	m_Effect->SetWorld(m_World);
 }
 
 void Renderer::Render()
@@ -367,9 +373,9 @@ void Renderer::Render()
 	Prepare();
 	Clear();
 
-	m_Effect->SetWorld(m_World);
 	m_Effect->Apply(m_CommandList.Get());
-	m_Shape->Draw(m_CommandList.Get());
+	m_Scene->Render(m_CommandList.Get());
+	//m_Shape->Draw(m_CommandList.Get());
 
 	Present();
 

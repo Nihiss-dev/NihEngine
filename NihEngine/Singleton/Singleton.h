@@ -1,9 +1,13 @@
 #pragma once
 
 #include <memory>
+#include "Core/NonCopyable.h"
+
+// TODO : make this thread safe
+// TODO : make this more efficient by using a unique_ptr instead of shared_ptr, but that would require some changes to the way we use singletons in the engine
 
 template <class T>
-class Singleton
+class Singleton : public NonCopyable
 {
 public:
 	static std::shared_ptr<T> GetInstance();
@@ -11,9 +15,6 @@ public:
 
 protected:
 	static std::shared_ptr<T> m_Instance;
-
-private:
-	T& operator= (const T&) {}
 };
 
 template<class T>
@@ -24,7 +25,6 @@ std::shared_ptr<T> Singleton<T>::GetInstance()
 {
 	if (m_Instance == nullptr)
 	{
-		//m_Instance = new T();
 		m_Instance = std::make_shared<T>();
 	}
 	return m_Instance;
@@ -33,6 +33,5 @@ std::shared_ptr<T> Singleton<T>::GetInstance()
 template<class T>
 void Singleton<T>::Kill()
 {
-	delete m_Instance;
-	m_Instance = nullptr;
+	m_Instance.reset();
 }

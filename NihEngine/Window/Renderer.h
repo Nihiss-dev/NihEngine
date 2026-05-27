@@ -8,6 +8,7 @@
 #include <wrl.h>
 
 #include "Core/Memory/UniquePtr.h"
+#include "Scene.h"
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
@@ -155,4 +156,5 @@ private:
 	DirectX::SimpleMath::Matrix m_Proj;
 
 	UniquePtr<DirectX::GeometricPrimitive> m_Shape;
+	UniquePtr<Scene> m_Scene;
 };

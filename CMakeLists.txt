@@ -27,6 +27,7 @@ add_subdirectory(ExternalDependencies)
 # Engine target
 # ---------------------------------------------------------------------------
 add_executable(NihEngine WIN32 ${NIHENGINE_SOURCES})
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT NihEngine)
 
 target_compile_features(NihEngine PRIVATE cxx_std_20)
 

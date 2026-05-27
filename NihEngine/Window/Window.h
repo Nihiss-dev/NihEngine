@@ -2,7 +2,6 @@
 
 #include "framework.h"
 #include <string>
-#include "NihEngine.h"
 
 #include "Core/Memory/UniquePtr.h"
 #include "Window/Renderer.h"

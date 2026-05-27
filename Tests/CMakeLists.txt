@@ -41,4 +41,4 @@ target_link_libraries(NihEngineTests
 # Test discovery
 # ---------------------------------------------------------------------------
 include(GoogleTest)
-gtest_discover_tests(NihEngineTests)
+gtest_discover_tests(NihEngineTests DISCOVERY_MODE PRE_TEST)
