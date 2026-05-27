@@ -34,7 +34,6 @@ target_compile_features(NihEngine PRIVATE cxx_std_20)
 target_include_directories(NihEngine
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/NihEngine
-        ${CMAKE_CURRENT_SOURCE_DIR}/ExternalDependencies/Imgui
 )
 
 target_link_libraries(NihEngine
@@ -56,6 +55,7 @@ target_link_libraries(NihEngine
         runtimeobject.lib
         # Third-party
         DirectXTK12
+	imgui
 )
 
 # ---------------------------------------------------------------------------
