@@ -9,6 +9,7 @@
 
 #include "Core/Memory/UniquePtr.h"
 #include "Scene.h"
+#include "Engine/Camera/Camera.h"
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
@@ -37,6 +38,8 @@ public:
 
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
+
+	Camera& GetCamera() { return m_Camera; }
 
 	void CreateDeviceResources();
 	void CreateWindowSizeDependentResources();
@@ -150,6 +153,8 @@ private:
 
 	using VertexType = DirectX::VertexPositionColor;
 	UniquePtr<DirectX::BasicEffect> m_Effect;
+
+	Camera m_Camera;
 
 	DirectX::SimpleMath::Matrix m_World;
 	DirectX::SimpleMath::Matrix m_View;

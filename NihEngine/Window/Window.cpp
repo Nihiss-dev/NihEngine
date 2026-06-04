@@ -1,5 +1,6 @@
 #include "Window.h"
 
+#include <windowsx.h>
 #include "Tasks/TaskManager.h"
 
 Window::Window()
@@ -196,6 +197,27 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	{
 		PostQuitMessage(0);
 		//TaskManager::GetInstance()->Stop();
+		break;
+	}
+	// Inputs
+	case WM_LBUTTONDOWN :
+	{
+		renderer->GetCamera().OnMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		renderer->GetCamera().OnMouseButtonUp();
+		break;
+	}
+	case WM_MOUSEMOVE:
+	{
+		renderer->GetCamera().OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		renderer->GetCamera().OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam) / static_cast<float>(WHEEL_DELTA));
 		break;
 	}
 	case WM_SYSKEYDOWN:

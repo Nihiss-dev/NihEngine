@@ -232,6 +232,7 @@ void Renderer::CreateDeviceResources()
 	m_Effect->EnableDefaultLighting();
 
 	m_Scene->Init();
+
 	//m_Shape = DirectX::GeometricPrimitive::CreateSphere();
 
 	m_World = DirectX::SimpleMath::Matrix::Identity;
@@ -359,10 +360,9 @@ void Renderer::CreateWindowSizeDependentResources()
 
 	using DirectX::SimpleMath::Matrix;
 
-	m_View = Matrix::CreateLookAt(DirectX::SimpleMath::Vector3(2.0f, 2.0f, 2.0f), DirectX::SimpleMath::Vector3::Zero, DirectX::SimpleMath::Vector3::UnitY);
-	m_Proj = Matrix::CreatePerspectiveFieldOfView(DirectX::XM_PI / 4.0f, float(m_OutputSize.right) / float(m_OutputSize.bottom), 0.1f, 10.0f);
-	m_Effect->SetView(m_View);
-	m_Effect->SetProjection(m_Proj);
+	m_Camera.Init(m_ScreenViewport.Width, m_ScreenViewport.Height);
+	m_Effect->SetView(m_Camera.GetViewMatrix());
+	m_Effect->SetProjection(m_Camera.GetProjectionMatrix());
 
 	m_World = Matrix::Identity;
 	m_Effect->SetWorld(m_World);
@@ -372,6 +372,9 @@ void Renderer::Render()
 {
 	Prepare();
 	Clear();
+
+	m_Effect->SetView(m_Camera.GetViewMatrix());
+	m_Effect->SetProjection(m_Camera.GetProjectionMatrix());
 
 	m_Effect->Apply(m_CommandList.Get());
 	m_Scene->Render(m_CommandList.Get());
