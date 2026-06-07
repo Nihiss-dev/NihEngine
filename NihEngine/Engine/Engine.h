@@ -2,6 +2,7 @@
 
 #include "Core/Memory/UniquePtr.h"
 #include "Tasks/TaskManager.h"
+#include "Window/Scene.h"
 #include "Window/Window.h"
 #include "Engine/StepTimer.h"
 #include "Core/NonCopyable.h"
@@ -30,6 +31,7 @@ private:
 private:
     UniquePtr<TaskManager> m_TaskManager{};
     UniquePtr<Window> m_Window{};
+	UniquePtr<Scene> m_Scene{};
 
     DX::StepTimer m_Timer;
     bool m_IsRunning{false};

@@ -1,7 +1,18 @@
 #include "Window.h"
 
 #include <windowsx.h>
+
 #include "Tasks/TaskManager.h"
+#include "Window/Scene.h"
+
+struct WndProcContext
+{
+	Renderer* m_Renderer{ nullptr };
+	Scene* m_Scene{ nullptr };
+};
+
+// Because WndProc is a static function
+static Window* sInstance{ nullptr };
 
 Window::Window()
 {
@@ -57,10 +68,11 @@ void Window::Init()
 	RECT rc = { 0, 0, static_cast<LONG>(m_Height), static_cast<LONG>(m_Width) };
 	GetClientRect(m_Hwnd, &rc);
 
-	//m_Renderer->Initialize(m_Hwnd, m_Height, m_Width);
 	m_Renderer->SetWindow(m_Hwnd, m_Height, m_Width);
 	m_Renderer->CreateDeviceResources();
 	m_Renderer->CreateWindowSizeDependentResources();
+
+	sInstance = this;
 }
 
 void Window::UpdateMessages()
@@ -72,6 +84,21 @@ void Window::UpdateMessages()
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+}
+
+void Window::Render(const RenderContext& context)
+{
+	m_Renderer->Render(context);
+}
+
+void Window::SetScene(Scene* scene)
+{
+	m_Scene = scene;
+}
+
+RECT Window::GetOutputSize() const
+{
+	return m_Renderer->GetOutputSize();
 }
 
 LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -127,6 +154,10 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		else if (sInSizeMove)
 		{
 			renderer->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+			if (sInstance)
+			{
+				sInstance->m_Scene->OnWindowSizeChanged(LOWORD(lParam), HIWORD(lParam));
+			}
 		}
 		break;
 	}
@@ -141,6 +172,10 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		RECT rc;
 		GetClientRect(hwnd, &rc);
 		renderer->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+		if (sInstance)
+		{
+			sInstance->m_Scene->OnWindowSizeChanged(rc.right - rc.left, rc.bottom - rc.top);
+		}
 		break;
 	}
 	case WM_GETMINMAXINFO:
@@ -202,22 +237,22 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 	// Inputs
 	case WM_LBUTTONDOWN :
 	{
-		renderer->GetCamera().OnMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		sInstance->m_Scene->GetCamera().OnMouseButtonDown(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
-		renderer->GetCamera().OnMouseButtonUp();
+		sInstance->m_Scene->GetCamera().OnMouseButtonUp();
 		break;
 	}
 	case WM_MOUSEMOVE:
 	{
-		renderer->GetCamera().OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+		sInstance->m_Scene->GetCamera().OnMouseMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	}
 	case WM_MOUSEWHEEL:
 	{
-		renderer->GetCamera().OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam) / static_cast<float>(WHEEL_DELTA));
+		sInstance->m_Scene->GetCamera().OnMouseWheel(GET_WHEEL_DELTA_WPARAM(wParam) / static_cast<float>(WHEEL_DELTA));
 		break;
 	}
 	case WM_SYSKEYDOWN:
@@ -252,11 +287,6 @@ LRESULT CALLBACK Window::Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
 		return DefWindowProcW(hwnd, message, wParam, lParam);
 	}
 	return 0;
-}
-
-void Window::Render()
-{
-	m_Renderer->Render();
 }
 
 void Window::OnDeviceLost()

@@ -5,7 +5,10 @@
 
 #include "Core/Memory/UniquePtr.h"
 #include "Window/Renderer.h"
+#include "Window/RenderContext.h"
 #include "Window/IDeviceNotify.h"
+
+class Scene;
 
 class Window : public IDeviceNotify
 //class Window
@@ -35,7 +38,10 @@ public:
 
 	void Init();
 	void UpdateMessages();
-	void Render();
+	void Render(const RenderContext& context);
+
+	void SetScene(Scene* scene);
+	RECT GetOutputSize() const;
 
 	static LRESULT CALLBACK Update(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -44,6 +50,7 @@ public:
 
 private:
 	UniquePtr<Renderer> m_Renderer;
+	Scene* m_Scene{ nullptr };
 	WindowInit m_WindowInit;
 	HWND m_Hwnd;
 	std::string m_WindowName;

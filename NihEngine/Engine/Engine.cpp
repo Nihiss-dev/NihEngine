@@ -9,6 +9,16 @@ void Engine::SetWindowInit(Window::WindowInit&& windowInit)
 void Engine::Init()
 {
 	m_Window->Init();
+
+	const RECT outputSize = m_Window->GetOutputSize();
+	const int width = outputSize.right - outputSize.left;
+	const int height = outputSize.bottom - outputSize.top;
+
+	m_Scene = std::make_unique<Scene>();
+	m_Scene->Init(width, height);
+
+	m_Window->SetScene(m_Scene.get());
+
 	m_TaskManager = std::make_unique<TaskManager>();
 	m_TaskManager->Init();
 }
@@ -46,7 +56,9 @@ void Engine::Tick()
 	{
 		return;
 	}
-	m_Window->Render();
+
+	const RenderContext context = m_Scene->GetRenderContext();
+	m_Window->Render(context);
 }
 
 void Engine::BeginFrame()
@@ -56,6 +68,7 @@ void Engine::BeginFrame()
 
 void Engine::Update(const float deltaTime)
 {
+	m_Scene->Update();
 	m_TaskManager->Update(deltaTime);
 }
 

@@ -8,8 +8,7 @@
 #include <wrl.h>
 
 #include "Core/Memory/UniquePtr.h"
-#include "Scene.h"
-#include "Engine/Camera/Camera.h"
+#include "Window/RenderContext.h"
 
 #ifdef _DEBUG
 #include <dxgidebug.h>
@@ -25,7 +24,6 @@ public:
 	static constexpr unsigned int c_ReverseDepth = 0x4;
 
 public:
-	//Renderer();
 	Renderer(DXGI_FORMAT backBufferFormat = DXGI_FORMAT_B8G8R8A8_UNORM,
 			 DXGI_FORMAT depthBufferFormat = DXGI_FORMAT_D32_FLOAT,
 			 UINT backBufferCount = 2,
@@ -39,7 +37,7 @@ public:
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
 
-	Camera& GetCamera() { return m_Camera; }
+	//Camera& GetCamera() { return m_Camera; }
 
 	void CreateDeviceResources();
 	void CreateWindowSizeDependentResources();
@@ -53,6 +51,8 @@ public:
 	void Present(D3D12_RESOURCE_STATES beforeState = D3D12_RESOURCE_STATE_RENDER_TARGET);
 	void WaitForGPU();
 	void UpdateColorSpace();
+
+	void Render(const RenderContext& context);
 
 	RECT GetOutputSize() const { return m_OutputSize; }
 
@@ -86,8 +86,6 @@ public:
 		const auto cpuHandle = m_DsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 		return CD3DX12_CPU_DESCRIPTOR_HANDLE(cpuHandle);
 	}
-
-	void Render();
 
 	// messages
 	void OnActivated();
@@ -153,13 +151,4 @@ private:
 
 	using VertexType = DirectX::VertexPositionColor;
 	UniquePtr<DirectX::BasicEffect> m_Effect;
-
-	Camera m_Camera;
-
-	DirectX::SimpleMath::Matrix m_World;
-	DirectX::SimpleMath::Matrix m_View;
-	DirectX::SimpleMath::Matrix m_Proj;
-
-	UniquePtr<DirectX::GeometricPrimitive> m_Shape;
-	UniquePtr<Scene> m_Scene;
 };

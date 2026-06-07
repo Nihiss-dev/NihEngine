@@ -1,6 +1,7 @@
 #include "Window/Renderer.h"
 #include "Window/d3dx12.h"
 
+#include "Engine/Camera/Camera.h"
 #include "System/Assert.h"
 #include "Window/IDeviceNotify.h"
 #include <DirectXColors.h>
@@ -52,8 +53,6 @@ Renderer::Renderer(DXGI_FORMAT backBufferFormat, DXGI_FORMAT depthBufferFormat, 
 {
 	NIH_ASSERT(!(backBufferCount < 2 || backBufferCount > MAX_BACK_BUFFER_COUNT));
 	NIH_ASSERT(!(minFeatureLevel < D3D_FEATURE_LEVEL_11_0));
-
-	m_Scene = std::make_unique<Scene>();
 }
 
 Renderer::~Renderer()
@@ -230,12 +229,6 @@ void Renderer::CreateDeviceResources()
 	DirectX::EffectPipelineStateDescription pipeState(&DirectX::GeometricPrimitive::VertexType::InputLayout, DirectX::CommonStates::Opaque, DirectX::CommonStates::DepthDefault, DirectX::CommonStates::CullNone, rtState);
 	m_Effect = std::make_unique<DirectX::BasicEffect>(m_D3dDevice.Get(), DirectX::EffectFlags::Lighting, pipeState);
 	m_Effect->EnableDefaultLighting();
-
-	m_Scene->Init();
-
-	//m_Shape = DirectX::GeometricPrimitive::CreateSphere();
-
-	m_World = DirectX::SimpleMath::Matrix::Identity;
 }
 
 void Renderer::CreateWindowSizeDependentResources()
@@ -360,26 +353,27 @@ void Renderer::CreateWindowSizeDependentResources()
 
 	using DirectX::SimpleMath::Matrix;
 
-	m_Camera.Init(m_ScreenViewport.Width, m_ScreenViewport.Height);
-	m_Effect->SetView(m_Camera.GetViewMatrix());
-	m_Effect->SetProjection(m_Camera.GetProjectionMatrix());
-
-	m_World = Matrix::Identity;
-	m_Effect->SetWorld(m_World);
+	// TODO: Should this be set here? It is not really a window size dependent resource
+	m_Effect->SetWorld(Matrix::Identity);
 }
 
-void Renderer::Render()
+void Renderer::Render(const RenderContext& context)
 {
 	Prepare();
 	Clear();
 
-	m_Effect->SetView(m_Camera.GetViewMatrix());
-	m_Effect->SetProjection(m_Camera.GetProjectionMatrix());
+	if (context.m_Camera)
+	{
+		m_Effect->SetView(context.m_Camera->GetViewMatrix());
+		m_Effect->SetProjection(context.m_Camera->GetProjectionMatrix());
+	}
 
 	m_Effect->Apply(m_CommandList.Get());
-	m_Scene->Render(m_CommandList.Get());
-	//m_Shape->Draw(m_CommandList.Get());
 
+	for (DirectX::GeometricPrimitive* primitive : context.m_Primitives)
+	{
+		primitive->Draw(m_CommandList.Get());
+	}
 	Present();
 
 	m_GraphicsMemory->Commit(GetCommandQueue());
@@ -570,7 +564,6 @@ void Renderer::HandleDeviceLost()
 	}
 
 	m_GraphicsMemory.reset();
-	m_Shape.reset();
 	m_Effect.reset();
 	//m_Batch.reset();
 
