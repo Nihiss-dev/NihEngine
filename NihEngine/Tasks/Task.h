@@ -1,9 +1,17 @@
 #pragma once
+
+#include "Tasks/TaskPhases.h"
+#include "Tasks/TaskTraits.h"
+
+template <TaskPhase Phase, typename Dependencies = RunAfter<>>
 class Task
 {
 public:
-	Task();
-	~Task();
+	static constexpr TaskPhase m_Phase = Phase;
+	using Dependencies = Dependencies;
+
+	Task() = default;
+	~Task() = default;
 
 	Task(Task&&) = default;
 	Task& operator=(Task&&) = default;
@@ -14,4 +22,3 @@ public:
 	virtual void Init() = 0;
 	virtual void Update(float deltaTime) = 0;
 };
-
