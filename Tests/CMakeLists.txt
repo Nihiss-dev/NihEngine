@@ -6,10 +6,12 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        v1.15.2
+    GIT_TAG        v1.14.0
 )
 # Force shared CRT on Windows so it matches the engine target
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # ---------------------------------------------------------------------------
@@ -25,6 +27,16 @@ file(GLOB_RECURSE TEST_SOURCES
 # ---------------------------------------------------------------------------
 add_executable(NihEngineTests ${TEST_SOURCES})
 
+set_property(TARGET NihEngineTests PROPERTY
+    MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
+target_compile_options(NihEngineTests PRIVATE
+    /EHsc
+    /GR
+    $<$<CONFIG:Debug>:/MDd>
+    $<$<CONFIG:Release>:/MD>
+)
+
 target_compile_features(NihEngineTests PRIVATE cxx_std_20)
 
 target_include_directories(NihEngineTests
@@ -34,7 +46,7 @@ target_include_directories(NihEngineTests
 
 target_link_libraries(NihEngineTests
     PRIVATE
-        GTest::gtest_main
+        GTest::gtest     
 )
 
 # ---------------------------------------------------------------------------
