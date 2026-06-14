@@ -6,4 +6,5 @@ enum class TaskPhase
 	Physics,
 	Gameplay,
 	Rendering,
+	Count
 };

@@ -18,7 +18,7 @@ TaskManager::~TaskManager()
 
 void TaskManager::Init()
 {
-	for (Task* task : m_Tasks)
+	for (ITask* task : m_Tasks)
 	{
 		task->Init();
 	}
@@ -38,7 +38,7 @@ void TaskManager::Update(float deltaTime)
 {
 	std::string test = std::string("Update: ") + std::to_string(deltaTime);
 	NIH_LOG_INFO(LogCategory::TaskManager, test.c_str());
-	for (Task* task : m_Tasks)
+	for (ITask* task : m_Tasks)
 	{
 		task->Update(deltaTime);
 	}
@@ -52,9 +52,4 @@ void TaskManager::EndFrame()
 void TaskManager::EndSimulation()
 {
 	NIH_LOG_INFO(LogCategory::TaskManager, "EndSimulation");
-}
-
-void TaskManager::AddTask(Task* task)
-{
-	m_Tasks.push_back(task);
 }
